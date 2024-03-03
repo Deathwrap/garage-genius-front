@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <h2>Вход</h2>
-    <form v-if="!isRegister" @submit.prevent="login">
+    <form @submit.prevent="login">
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="email" required>
@@ -12,26 +12,43 @@
       </div>
       <button type="submit">Войти</button>
     </form>
-      <router-link @click="toggleForm" to="/register">Нет аккаунта? Регистрация</router-link>
+      <router-link to="/register">Нет аккаунта? Регистрация</router-link>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import { mapMutations } from 'vuex';
+
 export default {
   name: 'LoginComponent',
   data() {
     return {
       email: '',
-      password: '',
-      isRegister: false
+      password: ''
     };
   },
   methods: {
-    login() {
-      // Ваша логика входа
-    },
-    toggleForm() {
-      this.isRegister = !this.isRegister;
+    ...mapMutations(['setLogin']), // Используем метод login из хранилища Vuex
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:5198/api/auth/sign_in', {
+          email: this.email,
+          password: this.password
+        });
+        this.setLogin();
+        const { id, name, accessToken, refreshToken } = response.data; // Предположим, что сервер возвращает токены в таком формате
+        // Сохраняем токены в localStorage или Vuex
+        localStorage.setItem('userId', id);
+        localStorage.setItem('userName', name);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        // Перенаправляем пользователя на другую страницу или выполняем другие действия
+        await this.$router.push('/about');
+      } catch (error) {
+        // Обрабатываем ошибки аутентификации (например, неверный email или пароль)
+        console.error('Ошибка при входе:', error);
+      }
     }
   }
 }

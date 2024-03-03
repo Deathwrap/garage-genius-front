@@ -2,7 +2,7 @@
 <template>
   <div class="register">
     <h2>Регистрация</h2>
-    <form v-if="isRegister" @submit.prevent="register">
+    <form @submit.prevent="register">
       <div class="form-group">
         <label for="name">Имя:</label>
         <input type="text" id="name" v-model="name" required>
@@ -17,7 +17,7 @@
       </div>
       <button type="submit">Зарегистрироваться</button>
     </form>
-      <router-link @click="toggleForm" to="/login">Уже есть аккаунт? Войти</router-link>
+      <router-link to="/login">Уже есть аккаунт? Войти</router-link>
   </div>
 </template>
 <script>
@@ -27,16 +27,36 @@ export default {
     return {
       name: '',
       email: '',
-      password: '',
-      isRegister: true
+      password: ''
     };
   },
   methods: {
-    register() {
-      // Ваша логика регистрации
-    },
-    toggleForm() {
-      this.isRegister = !this.isRegister;
+    async register() {
+      try {
+        const response = await fetch('http://localhost:5198/api/auth/sign_up', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: this.name,
+            email: this.email,
+            password: this.password
+          })
+        });
+        if (response.ok) {
+          // Перенаправляем пользователя на страницу входа
+          alert("На вашу почту было отправлено письмо с инструкциями по подтверждению аккаунта.");
+          await this.$router.push('/login');
+          // Отображаем всплывающее уведомление об успешной регистрации
+        } else {
+          // Обрабатываем ошибку в случае, если регистрация не удалась
+          const data = await response.json();
+          this.message = data.message;
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+      }
     }
   }
 }

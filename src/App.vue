@@ -15,8 +15,6 @@ export default {
   },
   data() {
     return {
-      isLoggedIn: false,
-      isRegister: false,// Устанавливаем начальное состояние входа пользователя
     };
   }
 }
