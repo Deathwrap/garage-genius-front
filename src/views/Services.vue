@@ -15,7 +15,7 @@
         <tr v-for="service in category.services" :key="service.id">
           <td>{{ service.name }}</td>
           <td>{{ service.executionTime }}</td>
-          <td>{{ service.standartHourPrice }}</td>
+          <td>{{ service.standardHourPrice }}</td>
         </tr>
         </tbody>
       </table>
