@@ -37,9 +37,8 @@ export default {
           password: this.password
         });
         this.setLogin();
-        const { id, name, accessToken, refreshToken } = response.data; // Предположим, что сервер возвращает токены в таком формате
+        const {name, accessToken, refreshToken } = response.data; // Предположим, что сервер возвращает токены в таком формате
         // Сохраняем токены в localStorage или Vuex
-        localStorage.setItem('userId', id);
         localStorage.setItem('userName', name);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
