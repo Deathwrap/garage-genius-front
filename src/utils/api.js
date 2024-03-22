@@ -1,7 +1,9 @@
 import axios from "axios";
 import router from "../router/index"
-
-
+import { mapMutations } from 'vuex';
+export const mutations = {
+    ...mapMutations(['setLogin', 'setLogout']) // Подключение мутаций из Vuex
+};
 // Создание экземпляра axios
 const api = axios.create({
     baseURL: 'http://localhost:5198/', // Укажите базовый URL вашего API
@@ -55,7 +57,7 @@ api.interceptors.response.use(response => {
             localStorage.removeItem('userName');
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            localStorage.setItem('isLoggedIn', 'false')
+            this.setLogout();
             await router.push('/login');
             return Promise.reject(refreshError);
         }
