@@ -28,8 +28,16 @@ export default {
       this.$emit('close');
     },
     bookAppointment() {
-      // Добавьте здесь логику для предварительной записи автомобиля в автосервис
       console.log('Запись на автомобиль', this.car.registrationNumber);
+      this.$router.push({
+        name: 'Appointment',
+        params: {
+          carId: this.car.id,
+          carBrand: this.car.brand,
+          carModel: this.car.model
+        }
+      });
+      // Добавьте здесь логику для предварительной записи автомобиля в автосервис
     }
   }
 }
