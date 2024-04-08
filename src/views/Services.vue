@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from "@/utils/api";
 
 export default {
   name: 'ServicesView',
@@ -39,7 +39,7 @@ export default {
   methods: {
     async fetchCategories() {
       try {
-        const response = await axios.get('http://localhost:5198/api/services/categories'); // Замените 'API_URL' на ваш URL для запроса категорий услуг
+        const response = await api.get('api/services/categories'); // Замените 'API_URL' на ваш URL для запроса категорий услуг
         this.categories = response.data;
         await this.fetchServicesForCategories();
       } catch (error) {
@@ -49,7 +49,7 @@ export default {
     async fetchServicesForCategories() {
       for (const category of this.categories) {
         try {
-          const response = await axios.get(`http://localhost:5198/api/services/by-id?categoryId=${category.id}`); // Замените 'API_URL' на ваш URL для запроса услуг
+          const response = await api.get(`api/services/by-id?categoryId=${category.id}`); // Замените 'API_URL' на ваш URL для запроса услуг
           category.services = response.data;
         } catch (error) {
           console.error(`Error fetching services for category ${category.name}:`, error);

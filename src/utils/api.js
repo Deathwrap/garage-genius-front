@@ -6,7 +6,7 @@ export const mutations = {
 };
 // Создание экземпляра axios
 const api = axios.create({
-    baseURL: 'http://localhost:5198/', // Укажите базовый URL вашего API
+    baseURL: 'http://192.168.1.146:5198/', // Укажите базовый URL вашего API
 });
 
 // Запрос на обновление токена
@@ -57,7 +57,7 @@ api.interceptors.response.use(response => {
             localStorage.removeItem('userName');
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            this.setLogout();
+            //this.setLogout();
             await router.push('/login');
             return Promise.reject(refreshError);
         }

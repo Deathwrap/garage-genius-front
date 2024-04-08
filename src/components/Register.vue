@@ -33,7 +33,7 @@ export default {
   methods: {
     async register() {
       try {
-        const response = await fetch('http://localhost:5198/api/auth/sign_up', {
+        const response = await fetch('http://192.168.1.146:5198/api/auth/sign_up', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

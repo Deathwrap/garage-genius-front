@@ -1,9 +1,13 @@
 <template>
   <div class="garage">
-    <h2>Гараж</h2>
     <div v-if="cars.length === 0">В вашем гараже пока нет автомобилей</div>
     <div v-else>
-      <div v-for="(car, id) in cars" :key="id" class="car">
+      <div
+          v-for="(car, index) in cars"
+          :key="index"
+          class="car"
+          @click="handleCarClick(car)"
+      >
         <p><strong>Марка:</strong> {{ car.brand }}</p>
         <p><strong>Модель:</strong> {{ car.model }}</p>
         <p><strong>Год:</strong> {{ car.year }}</p>
@@ -12,22 +16,26 @@
     </div>
     <button @click="showModal = true" class="add-car-btn">Добавить автомобиль</button>
     <add-car-modal v-if="showModal" @add="handleAddCar" @close="showModal = false"></add-car-modal>
+    <car-card v-if="selectedCar" :car="selectedCar" @close="selectedCar = null" />
   </div>
 </template>
 
 <script>
 import AddCarModal from './AddCarModal.vue'; // Подключаем компонент модального окна
+import CarCard from "@/components/CarCard.vue";
 import API from './../utils/api'
 
 export default {
   name: 'GarageComponent',
   components: {
-    AddCarModal // Регистрируем компонент модального окна
+    AddCarModal, // Регистрируем компонент модального окна
+    CarCard
   },
   data() {
     return {
       cars: [], // Здесь будут храниться автомобили клиента
-      showModal: false // Флаг для отображения/скрытия модального окна
+      showModal: false, // Флаг для отображения/скрытия модального окна
+      selectedCar: null // Добавляем свойство для хранения выбранной машины
     };
   },
   mounted() {
@@ -69,6 +77,10 @@ export default {
       }).catch(error => {
         console.error('Ошибка при добавлении автомобиля:', error);
       });
+    },
+    handleCarClick(car) {
+      this.selectedCar = car;
+      // Дополнительные действия при клике на машину, если нужно
     }
   }
 }
@@ -86,6 +98,11 @@ export default {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  cursor: pointer;
+}
+
+.car:hover {
+  background-color: #f0f0f0;
 }
 
 .add-car-btn {

@@ -7,8 +7,6 @@
         <div class="overlay"></div>
       </div>
     </div>
-    <p>Запишитесь к нам уже сегодня!</p>
-    <button class="appointment-button" @click="$router.push('/appointment')">Записаться</button>
   </div>
 </template>
 

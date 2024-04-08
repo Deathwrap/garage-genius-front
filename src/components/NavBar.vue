@@ -7,7 +7,6 @@
     <div class="navbar-links">
       <router-link to="/about" class="nav-link">О нас</router-link>
       <router-link to="/services" class="nav-link">Услуги</router-link>
-      <router-link to="/appointment" class="nav-link">Запись</router-link>
       <router-link to="/contacts" class="nav-link">Контакты</router-link> <!-- Добавляем пункт "Контакты" -->
       <template v-if="isLoggedIn">
         <router-link to="/profile" class="nav-link">Профиль</router-link>

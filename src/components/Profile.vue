@@ -5,12 +5,12 @@
       <button @click="logout" class="logout-btn">Выйти</button>
     </div>
     <div class="tabs">
-      <button @click="activeTab = 'garage'" :class="{ 'active': activeTab === 'garage' }" class="tab">Гараж</button>
-      <button @click="activeTab = 'orders'" :class="{ 'active': activeTab === 'orders' }" class="tab">История заказов</button>
+      <button @click="activeTab = 'garage'" :class="{ 'active-tab': activeTab === 'garage' }">Гараж</button>
+      <button @click="activeTab = 'orders'" :class="{ 'active-tab': activeTab === 'orders' }">История заказов</button>
     </div>
     <div v-if="activeTab === 'garage'">
       <garage></garage>
-    </div>    <div v-else-if="activeTab === 'orders'" class="tab-content">История заказов</div>
+    </div>
   </div>
 </template>
 
@@ -34,7 +34,7 @@ export default {
   methods: {
     ...mapMutations(['setLogout']), // Используем метод login из хранилища Vuex
     async logout() {
-      await API.post("http://localhost:5198/api/auth/logout")
+      await API.post("api/auth/logout")
       localStorage.removeItem('userId');
       localStorage.removeItem('userName');
       localStorage.removeItem('accessToken');
@@ -70,26 +70,39 @@ export default {
 }
 
 .tabs {
-  display: flex;
-  justify-content: center;
   margin-bottom: 20px;
 }
 
-.tab {
+.tabs button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #f0f0f0;
-  transition: background-color 0.3s;
+  background-color: transparent;
+  transition: background-color 0.3s, color 0.3s; /* Добавлен переход для изменения цвета текста */
+  position: relative;
+  margin-right: 10px; /* Расстояние между вкладками */
+  font-size: 18px; /* Размер текста */
+  font-weight: bold; /* Жирный стиль */
 }
 
-.tab:hover, .active {
-  background-color: #e0e0e0;
+.tabs button::after { /* Добавляем псевдоэлемент для подчеркивания */
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px; /* Высота подчеркивания */
+  background-color: #ccc; /* Цвет подчеркивания неактивной вкладки */
+  transition: background-color 0.3s; /* Переход для изменения цвета подчеркивания */
 }
 
-.tab-content {
-  margin-top: 20px;
+.tabs button:hover::after {
+  background-color: #007bff; /* Цвет подчеркивания при наведении */
+}
+
+.tabs button.active-tab::after {
+  background-color: #007bff; /* Цвет подчеркивания активной вкладки */
 }
 
 .logout-btn {
