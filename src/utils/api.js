@@ -6,7 +6,7 @@ export const mutations = {
 };
 // Создание экземпляра axios
 const api = axios.create({
-    baseURL: 'http://192.168.1.146:5198/', // Укажите базовый URL вашего API
+    baseURL: 'http://localhost:5198/', // Укажите базовый URL вашего API
 });
 
 // Запрос на обновление токена

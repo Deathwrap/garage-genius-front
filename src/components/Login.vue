@@ -32,7 +32,7 @@ export default {
     ...mapMutations(['setLogin']), // Используем метод login из хранилища Vuex
     async login() {
       try {
-        const response = await axios.post('http://192.168.1.146:5198/api/auth/sign_in', {
+        const response = await axios.post('http://localhost:5198/api/auth/sign_in', {
           email: this.email,
           password: this.password
         });

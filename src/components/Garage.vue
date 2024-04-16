@@ -1,20 +1,23 @@
 <template>
   <div class="garage">
-    <div v-if="cars.length === 0">В вашем гараже пока нет автомобилей</div>
+    <div v-if="isLoading">Загрузка...</div>
     <div v-else>
-      <div
-          v-for="(car, index) in cars"
-          :key="index"
-          class="car"
-          @click="handleCarClick(car)"
-      >
-        <p><strong>Марка:</strong> {{ car.brand }}</p>
-        <p><strong>Модель:</strong> {{ car.model }}</p>
-        <p><strong>Год:</strong> {{ car.year }}</p>
-        <p><strong>Госномер:</strong> {{ car.registrationNumber }}</p>
+      <div v-if="cars.length === 0">В вашем гараже пока нет автомобилей</div>
+      <div v-else>
+        <div
+            v-for="(car, index) in cars"
+            :key="index"
+            class="car"
+            @click="handleCarClick(car)"
+        >
+          <p><strong>Марка:</strong> {{ car.brand }}</p>
+          <p><strong>Модель:</strong> {{ car.model }}</p>
+          <p><strong>Год:</strong> {{ car.year }}</p>
+          <p><strong>Госномер:</strong> {{ car.registrationNumber }}</p>
+        </div>
       </div>
+      <button @click="showModal = true" class="add-car-btn">Добавить автомобиль</button>
     </div>
-    <button @click="showModal = true" class="add-car-btn">Добавить автомобиль</button>
     <add-car-modal v-if="showModal" @add="handleAddCar" @close="showModal = false"></add-car-modal>
     <car-card v-if="selectedCar" :car="selectedCar" @close="selectedCar = null" />
   </div>
@@ -35,7 +38,8 @@ export default {
     return {
       cars: [], // Здесь будут храниться автомобили клиента
       showModal: false, // Флаг для отображения/скрытия модального окна
-      selectedCar: null // Добавляем свойство для хранения выбранной машины
+      selectedCar: null, // Добавляем свойство для хранения выбранной машины
+      isLoading: true // Добавляем флаг для отслеживания состояния загрузки
     };
   },
   mounted() {
@@ -45,12 +49,18 @@ export default {
   methods: {
     async loadCars() {
       try {
+        // Показываем сообщение "Загрузка..."
+        this.isLoading = true;
         // Здесь делаем запрос на бэкенд для загрузки автомобилей клиента
         // Замените этот код на реальный запрос к вашему API
         const response = await API.get('api/cars/get-by-client'); // Пример URL для запроса
         this.cars = response.data;
+        // Убираем сообщение "Загрузка..." после успешной загрузки
+        this.isLoading = false;
       } catch (error) {
         console.error('Ошибка загрузки автомобилей:', error);
+        // Убираем сообщение "Загрузка..." в случае ошибки загрузки
+        this.isLoading = false;
       }
     },
     handleAddCar(newCar) {
